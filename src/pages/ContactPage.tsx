@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import ContactMap from "@/components/ContactMap";
 
 export default function ContactPage() {
   const { toast } = useToast();
@@ -209,10 +209,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-heading font-bold mb-4">Visit our showroom</h2>
               <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                {/* Placeholder for Google Maps */}
-                <div className="w-full h-full flex items-center justify-center bg-muted">
-                  <span className="text-muted-foreground">Google Maps Integration</span>
-                </div>
+                <ContactMap />
               </div>
             </div>
           </div>
