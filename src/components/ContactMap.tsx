@@ -1,5 +1,15 @@
 
 import { useEffect, useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+// Add Google Maps type definitions
+declare global {
+  interface Window {
+    initMap: () => void;
+    google: typeof google;
+  }
+}
 
 export default function ContactMap() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -15,68 +25,70 @@ export default function ContactMap() {
       script.defer = true;
       
       window.initMap = function() {
-        const map = new google.maps.Map(mapRef.current!, {
-          center: { lat: 19.0760, lng: 72.8777 }, // Mumbai coordinates
-          zoom: 14,
-          styles: [
-            { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-            {
-              featureType: "administrative.locality",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#d59563" }],
-            },
-            {
-              featureType: "poi",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#d59563" }],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry",
-              stylers: [{ color: "#38414e" }],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry.stroke",
-              stylers: [{ color: "#212a37" }],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#9ca5b3" }],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "geometry",
-              stylers: [{ color: "#746855" }],
-            },
-            {
-              featureType: "water",
-              elementType: "geometry",
-              stylers: [{ color: "#17263c" }],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#515c6d" }],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.stroke",
-              stylers: [{ color: "#17263c" }],
-            },
-          ],
-        });
+        if (typeof google !== 'undefined' && mapRef.current) {
+          const map = new google.maps.Map(mapRef.current, {
+            center: { lat: 19.0760, lng: 72.8777 }, // Mumbai coordinates
+            zoom: 14,
+            styles: [
+              { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+              { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+              { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+              {
+                featureType: "administrative.locality",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#d59563" }],
+              },
+              {
+                featureType: "poi",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#d59563" }],
+              },
+              {
+                featureType: "road",
+                elementType: "geometry",
+                stylers: [{ color: "#38414e" }],
+              },
+              {
+                featureType: "road",
+                elementType: "geometry.stroke",
+                stylers: [{ color: "#212a37" }],
+              },
+              {
+                featureType: "road",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#9ca5b3" }],
+              },
+              {
+                featureType: "road.highway",
+                elementType: "geometry",
+                stylers: [{ color: "#746855" }],
+              },
+              {
+                featureType: "water",
+                elementType: "geometry",
+                stylers: [{ color: "#17263c" }],
+              },
+              {
+                featureType: "water",
+                elementType: "labels.text.fill",
+                stylers: [{ color: "#515c6d" }],
+              },
+              {
+                featureType: "water",
+                elementType: "labels.text.stroke",
+                stylers: [{ color: "#17263c" }],
+              },
+            ],
+          });
 
-        const marker = new google.maps.Marker({
-          position: { lat: 19.0760, lng: 72.8777 },
-          map: map,
-          title: "SuperBikes Showroom"
-        });
+          const marker = new google.maps.Marker({
+            position: { lat: 19.0760, lng: 72.8777 },
+            map: map,
+            title: "SuperBikes Showroom"
+          });
 
-        setMapLoaded(true);
+          setMapLoaded(true);
+        }
       };
 
       document.head.appendChild(script);
@@ -134,11 +146,4 @@ export default function ContactMap() {
       </p>
     </div>
   );
-}
-
-// Add type declaration for the global Google Maps callback
-declare global {
-  interface Window {
-    initMap: () => void;
-  }
 }
