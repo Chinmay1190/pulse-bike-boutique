@@ -3,13 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-// Add Google Maps type definitions
-declare global {
-  interface Window {
-    initMap: () => void;
-    google: typeof google;
-  }
+// Define interface for Google Maps
+interface GoogleMap {
+  Map: new (element: HTMLElement, options: any) => any;
+  Marker: new (options: any) => any;
 }
+
+// Define window interface with Google property
+interface CustomWindow extends Window {
+  initMap: () => void;
+  google?: {
+    maps: GoogleMap;
+  };
+}
+
+declare let window: CustomWindow;
 
 export default function ContactMap() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -25,8 +33,8 @@ export default function ContactMap() {
       script.defer = true;
       
       window.initMap = function() {
-        if (typeof google !== 'undefined' && mapRef.current) {
-          const map = new google.maps.Map(mapRef.current, {
+        if (window.google && mapRef.current) {
+          const map = new window.google.maps.Map(mapRef.current, {
             center: { lat: 19.0760, lng: 72.8777 }, // Mumbai coordinates
             zoom: 14,
             styles: [
@@ -81,7 +89,7 @@ export default function ContactMap() {
             ],
           });
 
-          const marker = new google.maps.Marker({
+          const marker = new window.google.maps.Marker({
             position: { lat: 19.0760, lng: 72.8777 },
             map: map,
             title: "SuperBikes Showroom"
@@ -123,14 +131,14 @@ export default function ContactMap() {
       <div className="w-full h-full min-h-[300px]">
         <div 
           ref={mapRef} 
-          className="w-full h-full"
+          className="w-full h-full rounded-md"
         />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-muted/30">
+    <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-muted/30 rounded-md">
       <p className="mb-4 text-muted-foreground">Enter your Google Maps API Key</p>
       <form onSubmit={handleApiKeySubmit} className="w-full max-w-sm flex gap-2">
         <Input 
